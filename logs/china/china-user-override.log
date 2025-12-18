@@ -1,0 +1,21 @@
+--- china-user-override.spec.js [FAIL] ---
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] tests\china-user-override.spec.js:3:5 › Eligibility check and Future USD List Price calculation
+[1A[2K  1) tests\china-user-override.spec.js:3:5 › Eligibility check and Future USD List Price calculation 
+
+    Error: page.goto: url: expected string, got undefined
+
+       7 |
+       8 |   // 1️⃣ Login
+    >  9 |   await page.goto(cdbuLoginUrl);
+         |              ^
+      10 |   await page.getByRole('textbox', { name: 'Username or email' }).fill('gopika');
+      11 |   await page.getByRole('textbox', { name: 'Password' }).fill('Rainy$Nights2Read');
+      12 |   await page.getByRole('button', { name: 'Sign In' }).click();
+        at C:\work\automation_playwright_UI\tests\china-user-override.spec.js:9:14
+
+
+[1A[2K  1 failed
+    tests\china-user-override.spec.js:3:5 › Eligibility check and Future USD List Price calculation 

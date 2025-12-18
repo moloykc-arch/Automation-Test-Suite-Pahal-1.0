@@ -1,0 +1,4 @@
+psycopg2-binary
+pyautogui
+python3-xlib
+mouseinfo

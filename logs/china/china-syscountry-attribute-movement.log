@@ -1,0 +1,41 @@
+--- china-syscountry-attribute-movement.spec.js [PASS] ---
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] tests\china-syscountry-attribute-movement.spec.js:4:5 › Future -> Current Country Factor transfer after scheduler run
+[1A[2Ktests\china-syscountry-attribute-movement.spec.js:4:5 › Future -> Current Country Factor transfer after scheduler run
+🚀 Test started
+
+[1A[2K🔹 Navigating to login page
+
+[1A[2K⚡ Scheduler server running on port 8085
+
+[1A[2K✅ Logged in successfully
+
+[1A[2K🔹 Navigating to sys Country
+
+[1A[2K🔹 Clicked storageData Explorer Work menu
+
+[1A[2K🔹 Clicked Part dropdown
+
+[1A[2K✅ Selected sys Country
+
+[1A[2K🔹 Set Future Country Factor USD = 346.45
+
+[1A[2K🔹 Set Effective Date = 11/19/2025
+
+[1A[2K✅ Saved SysCountry record
+
+[1A[2K🔹 Calling scheduler API...
+
+[1A[2K⚡ Scheduler endpoint called!
+
+[1A[2K✅ Scheduler API completed successfully
+
+[1A[2K🔹 Future value: 346.45, Current value: 346.45
+
+[1A[2K✅ Test completed successfully
+
+[1A[2K⚡ Scheduler server stopped
+
+[1A[2K  1 passed (24.5s)

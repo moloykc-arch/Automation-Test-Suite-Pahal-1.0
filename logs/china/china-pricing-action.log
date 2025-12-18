@@ -1,0 +1,253 @@
+--- china-pricing-action.spec.js [PASS] ---
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] tests\china-pricing-action.spec.js:40:5 › test
+[1A[2Ktests\china-pricing-action.spec.js:40:5 › test
+CHINA Factor USD: [33m4[39m
+
+[1A[2KCHINA Factor Local: [33m4[39m
+
+[1A[2KTAIWAN Factor USD: [33m5[39m
+
+[1A[2KTAIWAN Factor Local: [33m6[39m
+
+[1A[2KMONGOLIA Factor USD: [33m2[39m
+
+[1A[2KMONGOLIA Factor Local: [33m7[39m
+
+[1A[2KHONG KONG Factor USD: [33m2[39m
+
+[1A[2KHONG KONG Factor Local: [33m8[39m
+
+[1A[2K📊 Current Exchange Rates:
+
+[1A[2KCHINA: [33m4[39m
+
+[1A[2KTAIWAN: [33m5[39m
+
+[1A[2KMONGOLIA: [33m1240[39m
+
+[1A[2KHONG KONG: [33m2[39m
+
+[1A[2K
+Processing region: CHINA with Product Code: CHINA-5344930F
+
+[1A[2KProcessing region: CHINA
+
+[1A[2K⚠️ LP Override Flag combobox not visible
+
+[1A[2K📌 DN Pricing Action current value: None
+
+[1A[2K📌 PVC Pricing Action current value: null/empty
+
+[1A[2K✅ China Pricing Action updated to "Emergency Change-China"
+
+[1A[2K✅ Current Local Currency List Price is empty/null
+
+[1A[2KFuture USD List Price: [33m3108[39m
+
+[1A[2K✅ Current Base Price already has value: 777
+
+[1A[2K🧮 Expected Calculated USD List Price: 777 * 4 = 3108
+
+[1A[2K💾 Future USD List Price updated to: 3108
+
+[1A[2K💾 Calculated USD List Price updated to: 3108
+
+[1A[2K📊 Extracted Values from UI:
+
+[1A[2KFuture Base Price: [33m555[39m
+
+[1A[2KPublish Base Price: [33m666[39m
+
+[1A[2KCurrent Base Price: [33m777[39m
+
+[1A[2K📊 Extracted Calculated USD List Price from UI: [33m3108[39m
+
+[1A[2K📊 Extracted Future USD List Price from UI: [33m3108[39m
+
+[1A[2K✅ Both USD List Prices match expected value. PASS
+
+[1A[2K📊 Base Price used for Local Currency calculation: [33m555[39m
+
+[1A[2K🧮 Expected Calculated Local Currency List Price: 555 * 4 * 4 = 8880
+
+[1A[2K💾 Calculated Local Currency List Price updated to: 8880
+
+[1A[2K💾 Future Local Currency List Price updated to: 8880
+
+[1A[2K📊 Extracted Values from UI:
+
+[1A[2KCalculated Local Currency List Price: [33m8880[39m
+
+[1A[2KFuture Local Currency List Price: [33m8880[39m
+
+[1A[2K✅ Calculated Local Currency List Price matches expected value. PASS
+
+[1A[2K
+Processing region: TAIWAN with Product Code: TAIWAN-5344930F
+
+[1A[2KProcessing region: TAIWAN
+
+[1A[2K⚠️ LP Override Flag combobox not visible
+
+[1A[2K📌 DN Pricing Action current value: None
+
+[1A[2K📌 PVC Pricing Action current value: null/empty
+
+[1A[2K✅ China Pricing Action updated to "Emergency Change-China"
+
+[1A[2K✅ Current Local Currency List Price is empty/null
+
+[1A[2KFuture USD List Price: [33m27.3333[39m
+
+[1A[2K✅ Current Base Price already has value: 777
+
+[1A[2K🧮 Expected Calculated USD List Price: 777 * 5 = 3885
+
+[1A[2K💾 Future USD List Price updated to: 3885
+
+[1A[2K💾 Calculated USD List Price updated to: 3885
+
+[1A[2K📊 Extracted Values from UI:
+
+[1A[2KFuture Base Price: [33m555[39m
+
+[1A[2KPublish Base Price: [33m666[39m
+
+[1A[2KCurrent Base Price: [33m777[39m
+
+[1A[2K📊 Extracted Calculated USD List Price from UI: [33m3885[39m
+
+[1A[2K📊 Extracted Future USD List Price from UI: [33m3885[39m
+
+[1A[2K✅ Both USD List Prices match expected value. PASS
+
+[1A[2K📊 Base Price used for Local Currency calculation: [33m555[39m
+
+[1A[2K🧮 Expected Calculated Local Currency List Price: 555 * 6 * 5 = 16650
+
+[1A[2K💾 Calculated Local Currency List Price updated to: 16650
+
+[1A[2K💾 Future Local Currency List Price updated to: 16650
+
+[1A[2K📊 Extracted Values from UI:
+
+[1A[2KCalculated Local Currency List Price: [33m16650[39m
+
+[1A[2KFuture Local Currency List Price: [33m16650[39m
+
+[1A[2K✅ Calculated Local Currency List Price matches expected value. PASS
+
+[1A[2K
+Processing region: HONG KONG with Product Code: HONG KONG-5344930F
+
+[1A[2KProcessing region: HONG KONG
+
+[1A[2K⚠️ LP Override Flag combobox not visible
+
+[1A[2K📌 DN Pricing Action current value: None
+
+[1A[2K📌 PVC Pricing Action current value: null/empty
+
+[1A[2K✅ China Pricing Action updated to "Emergency Change-China"
+
+[1A[2K✅ Current Local Currency List Price is empty/null
+
+[1A[2KFuture USD List Price: [33m1554[39m
+
+[1A[2K✅ Current Base Price already has value: 777
+
+[1A[2K🧮 Expected Calculated USD List Price: 777 * 2 = 1554
+
+[1A[2K💾 Future USD List Price updated to: 1554
+
+[1A[2K💾 Calculated USD List Price updated to: 1554
+
+[1A[2K📊 Extracted Values from UI:
+
+[1A[2KFuture Base Price: [33m555[39m
+
+[1A[2KPublish Base Price: [33m666[39m
+
+[1A[2KCurrent Base Price: [33m777[39m
+
+[1A[2K📊 Extracted Calculated USD List Price from UI: [33m1554[39m
+
+[1A[2K📊 Extracted Future USD List Price from UI: [33m1554[39m
+
+[1A[2K✅ Both USD List Prices match expected value. PASS
+
+[1A[2K📊 Base Price used for Local Currency calculation: [33m555[39m
+
+[1A[2K🧮 Expected Calculated Local Currency List Price: 555 * 8 * 2 = 8880
+
+[1A[2K💾 Calculated Local Currency List Price updated to: 8880
+
+[1A[2K💾 Future Local Currency List Price updated to: 8880
+
+[1A[2K📊 Extracted Values from UI:
+
+[1A[2KCalculated Local Currency List Price: [33m8880[39m
+
+[1A[2KFuture Local Currency List Price: [33m8880[39m
+
+[1A[2K✅ Calculated Local Currency List Price matches expected value. PASS
+
+[1A[2K
+Processing region: MONGOLIA with Product Code: MONGOLIA-5344930F
+
+[1A[2KProcessing region: MONGOLIA
+
+[1A[2K⚠️ LP Override Flag combobox not visible
+
+[1A[2K📌 DN Pricing Action current value: None
+
+[1A[2K📌 PVC Pricing Action current value: null/empty
+
+[1A[2K✅ China Pricing Action updated to "Emergency Change-China"
+
+[1A[2K❌ Current Local Currency List Price has value: 574
+
+[1A[2KFuture USD List Price: [33mNaN[39m
+
+[1A[2K✅ Current Base Price already has value: 777
+
+[1A[2K🧮 Expected Calculated USD List Price: 777 * 2 = 1554
+
+[1A[2K💾 Future USD List Price updated to: 1554
+
+[1A[2K💾 Calculated USD List Price updated to: 1554
+
+[1A[2K📊 Extracted Values from UI:
+
+[1A[2KFuture Base Price: [33m555[39m
+
+[1A[2KPublish Base Price: [33m666[39m
+
+[1A[2KCurrent Base Price: [33m777[39m
+
+[1A[2K📊 Extracted Calculated USD List Price from UI: [33m1554[39m
+
+[1A[2K📊 Extracted Future USD List Price from UI: [33m1554[39m
+
+[1A[2K✅ Both USD List Prices match expected value. PASS
+
+[1A[2K📊 Base Price used for Local Currency calculation: [33m555[39m
+
+[1A[2K🧮 Expected Calculated Local Currency List Price: 555 * 7 * 1240 = 4817400
+
+[1A[2K💾 Calculated Local Currency List Price updated to: 4817400
+
+[1A[2K💾 Future Local Currency List Price updated to: 4817400
+
+[1A[2K📊 Extracted Values from UI:
+
+[1A[2KCalculated Local Currency List Price: [33m4817400[39m
+
+[1A[2KFuture Local Currency List Price: [33m4817400[39m
+
+[1A[2K✅ Calculated Local Currency List Price matches expected value. PASS
+
+[1A[2K  1 passed (1.5m)

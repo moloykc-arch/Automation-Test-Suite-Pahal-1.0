@@ -1,0 +1,17 @@
+--- china-dbpoll.spec.js [PASS] ---
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] tests\china-dbpoll.spec.js:4:5 › UI + API + NRP tab validation
+[1A[2Ktests\china-dbpoll.spec.js:4:5 › UI + API + NRP tab validation
+Server started on port 5087
+
+[1A[2K{ status: [32m'success'[39m }
+
+[1A[2K✅ Engine Model saved in NRP QA: 8000 {CTT-8000}
+
+[1A[2KEngine Model in China DBU QA after refresh: 8000
+
+[1A[2K✅ Engine Model is correct in China DBU QA (8000 contains 8000)
+
+[1A[2K  1 passed (36.1s)

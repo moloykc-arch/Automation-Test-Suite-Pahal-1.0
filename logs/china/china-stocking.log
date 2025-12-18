@@ -1,0 +1,9 @@
+--- china-stocking.spec.js [PASS] ---
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] tests\china-stocking.spec.js:3:5 › duplicate window handling
+[1A[2Ktests\china-stocking.spec.js:3:5 › duplicate window handling
+Open pages: [33m2[39m
+
+[1A[2K  1 passed (25.4s)

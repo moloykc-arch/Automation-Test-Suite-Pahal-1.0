@@ -1,0 +1,41 @@
+--- china-flow-Business-rule.spec.js [PASS] ---
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] tests\china-flow-Business-rule.spec.js:5:5 › validate Future Product Group rule
+[1A[2Ktests\china-flow-Business-rule.spec.js:5:5 › validate Future Product Group rule
+🚀 Starting test: validate Future Product Group rule
+
+[1A[2K✅ PM Override Flag selected: Yes
+
+[1A[2KFuture Product Group: ""
+
+[1A[2KSystem Recommended Product Group: "A710"
+
+[1A[2K✅ Test Passed: Future Product Group is valid (either empty or different)
+
+[1A[2K  1) tests\china-flow-Business-rule.spec.js:5:5 › validate Future Product Group rule ───────────────
+
+    [31mTest timeout of 300000ms exceeded.[39m
+
+    Error: locator.click: Test timeout of 300000ms exceeded.
+    Call log:
+    [2m  - waiting for getByRole('button', { name: 'Submit' })[22m
+
+
+      66 |
+      67 |   // ---- 7. Submit and Save ----
+    > 68 |   await page.getByRole('button', { name: 'Submit' }).click();
+         |                                                      ^
+      69 |   await page.getByRole('button', { name: 'Save', exact: true }).click();
+      70 |
+      71 |   console.log('🏁 Test completed successfully');
+        at C:\work\automation_playwright_UI\tests\china-flow-Business-rule.spec.js:68:54
+
+    Error Context: test-results\tests-china-flow-Business--5ff9b-e-Future-Product-Group-rule\error-context.md
+
+
+[1A[2K  Slow test file: tests\china-flow-Business-rule.spec.js (5.0m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  1 failed
+    tests\china-flow-Business-rule.spec.js:5:5 › validate Future Product Group rule ────────────────

@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM Test Execution Suite 1.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Fixed Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 12px 40px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 999;
+            border-bottom: 3px solid transparent;
+            border-image: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-image-slice: 1;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 2px solid #667eea;
+            padding: 8px 20px;
+            border-radius: 50px;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .logo {
+            height: 28px;
+            width: auto;
+        }
+
+        .header h1 {
+            font-size: 1.3em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* Run Button in Header */
+        .run-button {
+            padding: 10px 28px;
+            font-size: 0.95em;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 50%, #2e7d32 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .run-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .run-button:hover::before {
+            left: 100%;
+        }
+
+        .run-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.5);
+        }
+
+        .run-button:active {
+            transform: translateY(0);
+        }
+
+        .run-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            background: linear-gradient(135deg, #9e9e9e 0%, #757575 100%);
+        }
+
+        /* Menu & Summary Buttons */
+        .summary-btn, .menu-btn {
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .summary-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .summary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5);
+        }
+
+        .menu-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        /* Sidebar Menu */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 320px;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
+            transition: left 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.3em;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-items {
+            padding: 20px 0;
+        }
+
+        .menu-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+            font-size: 1.05em;
+            color: #333;
+        }
+
+        .menu-item:hover {
+            background: #f0f0f0;
+            border-left-color: #667eea;
+        }
+
+        .menu-item.active {
+            background: #e8ecff;
+            border-left-color: #667eea;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .content-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-header h2 {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .content-header p {
+            color: #666;
+            font-size: 1em;
+        }
+
+        /* Results Section */
+        .results-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .results-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .results-container {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        #result {
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Custom scrollbar */
+        .results-container::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .results-container::-webkit-scrollbar-track {
+            background: #2d2d2d;
+            border-radius: 5px;
+        }
+
+        .results-container::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 5px;
+        }
+
+        .results-container::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+
+        /* Summary Modal */
+        .summary-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .summary-modal.active {
+            display: flex;
+        }
+
+        .summary-content {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .summary-header h2 {
+            font-size: 1.8em;
+            color: #333;
+        }
+
+        .summary-close {
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            cursor: pointer;
+            color: #666;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .summary-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        /* Project List */
+        .project-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
+            border: 2px solid #e0e5ff;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+
+        .project-info-card {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .project-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .project-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .view-details-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-details-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Summary Details View */
+        .summary-details {
+            display: none;
+        }
+
+        .summary-details.active {
+            display: block;
+        }
+
+        .back-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+        }
+
+        .stat-card.passed {
+            background: linear-gradient(135deg, #4CAF50 0%, #2e7d32 100%);
+        }
+
+        .stat-card.failed {
+            background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+        }
+
+        .stat-card h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .failed-tests {
+            margin-top: 20px;
+        }
+
+        .failed-tests h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .failed-test-item {
+            background: #fff5f5;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+        }
+
+        .failed-test-item h4 {
+            color: #c62828;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        .log-link {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        .log-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.1em;
+            }
+
+            .logo {
+                height: 24px;
+            }
+
+            .header-right {
+                gap: 8px;
+            }
+
+            .run-button, .summary-btn, .menu-btn {
+                padding: 8px 16px;
+                font-size: 0.85em;
+            }
+
+            .main-content {
+                padding: 20px;
+                margin-top: 70px;
+            }
+
+            .sidebar {
+                width: 280px;
+                left: -280px;
+            }
+        }
+
+        /*Env Pop up*/
+         .env-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 3000; /* Higher than other modals */
+        display: none;
+        align-items: center;
+        justify-content: center;
+        }
+
+    .env-modal.active {
+        display: flex;
+    }
+
+    .env-content {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        width: 400px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        text-align: center;
+    }
+
+    .env-content h3 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .env-select {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 25px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1em;
+        background-color: #f9f9f9;
+    }
+
+    .env-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .btn-cancel {
+        background: #f0f0f0;
+        color: #333;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .btn-confirm {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        flex: 1;
+    }
+    </style>
+</head>
+<body>
+    <div class="env-modal" id="envModal">
+    <div class="env-content">
+        <h3>🌍 Select Target Environment</h3>
+        <p style="margin-bottom: 15px; color: #666; font-size: 0.9em;">Where should the tests run?</p>
+        
+        <select id="envSelector" class="env-select">
+            <option value="cdbu_dev">CDBU Dev (dev-spriced-cdbu)</option>
+            <option value="cdbu_qa">CDBU QA (qa-spriced-cdbu)</option>
+            <option value="nrp_dev">NRP Dev (dev-spriced-nrp)</option>
+        </select>
+
+        <div class="env-actions">
+            <button class="btn-cancel" onclick="closeEnvModal()">Cancel</button>
+            <button class="btn-confirm" onclick="confirmRunTests()">🚀 Start Tests</button>
+        </div>
+    </div>
+    </div>
+    <!-- Sidebar Menu -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>📋 Projects</h2>
+            <button class="close-btn" onclick="toggleMenu()">✕</button>
+        </div>
+        <div class="menu-items">
+            <div class="menu-item active" onclick="selectProject('china')">
+                🇨🇳 China
+            </div>
+            <div class="menu-item" onclick="selectProject('nrp')">
+                🌐 NRP
+            </div>
+            <div class="menu-item" onclick="selectProject('psbu')">
+                🏢 PSBU
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <!-- Fixed Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='img/sim-globalstrategists_1.png') }}" 
+                     alt="SIM Advisory Logo" class="logo">
+            </div>
+            <h1>SIM Test Execution Suite 1.0</h1>
+        </div>
+        <div class="header-right">
+            <button class="run-button" onclick="runTests()" id="runBtn">
+                <span style="position: relative; z-index: 1;">▶️ RUN TESTS</span>
+            </button>
+            <button class="summary-btn" onclick="toggleSummary()">📊 Summary</button>
+            <button class="menu-btn" onclick="toggleMenu()">☰ Menu</button>
+        </div>
+    </div>
+
+    <!-- Summary Modal -->
+    <div class="summary-modal" id="summaryModal" onclick="closeSummaryOnOverlay(event)">
+        <div class="summary-content">
+            <!-- Project List View -->
+            <div id="projectListView">
+                <div class="summary-header">
+                    <h2>📊 Test Execution History</h2>
+                    <button class="summary-close" onclick="toggleSummary()">✕</button>
+                </div>
+                
+                <div class="project-list" id="projectList">
+                    <!-- Projects will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- Summary Details View -->
+            <div class="summary-details" id="summaryDetailsView">
+                <button class="back-btn" onclick="showProjectList()">← Back to Projects</button>
+                
+                <div class="summary-header">
+                    <h2 id="detailProjectName">Project Details</h2>
+                    <button class="summary-close" onclick="toggleSummary()">✕</button>
+                </div>
+                
+                <div class="summary-stats">
+                    <div class="stat-card">
+                        <h3 id="totalTests">0</h3>
+                        <p>Total Tests</p>
+                    </div>
+                    <div class="stat-card passed">
+                        <h3 id="passedTests">0</h3>
+                        <p>Passed</p>
+                    </div>
+                    <div class="stat-card failed">
+                        <h3 id="failedTests">0</h3>
+                        <p>Failed</p>
+                    </div>
+                </div>
+
+                <div class="failed-tests" id="failedTestsSection" style="display: none;">
+                    <h3>❌ Failed Tests</h3>
+                    <div id="failedTestsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="content-header">
+            <div class="project-info">
+                <h2 id="projectTitle">China Project</h2>
+                <p id="projectDesc">Execute automated tests for China region</p>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <h2>📊 Test Execution Results</h2>
+            <div class="results-container">
+                <pre id="result">Ready to run tests... Click "RUN TESTS" button to begin.</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProject = 'china';
+        let testResults = [];
+        let projectHistory = [];
+
+        const projectConfig = {
+            china: {
+                title: 'China Project',
+                desc: 'Execute automated tests for China region',
+                endpoint: '/run-china-tests'
+            },
+            nrp: {
+                title: 'NRP Project',
+                desc: 'Execute automated tests for NRP',
+                endpoint: '/run-nrp-tests'
+            },
+            psbu: {
+                title: 'PSBU Project',
+                desc: 'Execute automated tests for PSBU',
+                endpoint: '/run-psbu-tests'
+            }
+        };
+
+        // ========================================
+        // DATABASE API FUNCTIONS
+        // ========================================
+
+        // Load history from backend database
+        async function loadHistoryFromBackend() {
+            try {
+                console.log('📥 Loading history from backend database...');
+                const response = await fetch('/api/get-history');
+                const data = await response.json();
+                
+                if (data.success) {
+                    projectHistory = data.history || [];
+                    console.log('✅ History loaded:', projectHistory.length, 'entries');
+                } else {
+                    console.error('❌ Error from backend:', data.error);
+                    projectHistory = [];
+                }
+            } catch (error) {
+                console.error('❌ Error loading history:', error);
+                projectHistory = [];
+            }
+        }
+
+        // ========================================
+        // UI FUNCTIONS
+        // ========================================
+
+        // Initialize project list
+        function initializeProjectList() {
+            const projectList = document.getElementById('projectList');
+            projectList.innerHTML = '';
+
+            if (projectHistory.length === 0) {
+                projectList.innerHTML = `
+                    <p style="text-align: center; color: #666; padding: 40px;">
+                        No test execution history available.<br>
+                        Run tests to see results here.
+                    </p>
+                `;
+                return;
+            }
+
+            projectHistory.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.innerHTML = `
+                    <div class="project-info-card">
+                        <div class="project-name">${project.name}</div>
+                        <div class="project-meta">
+                            <span>📅 ${project.date}</span>
+                            <span>🕐 ${project.time}</span>
+                            <span>💻 ${project.platform}</span>
+                        </div>
+                    </div>
+                    <button class="view-details-btn" onclick="showProjectDetails('${project.id}')">
+                        View Details →
+                    </button>
+                `;
+                projectList.appendChild(card);
+            });
+        }
+
+        function showProjectDetails(projectId) {
+            const project = projectHistory.find(p => p.id === projectId);
+            if (!project) return;
+
+            document.getElementById('projectListView').style.display = 'none';
+            document.getElementById('summaryDetailsView').classList.add('active');
+            
+            document.getElementById('detailProjectName').textContent = project.name;
+            document.getElementById('totalTests').textContent = project.totalTests;
+            document.getElementById('passedTests').textContent = project.passed;
+            document.getElementById('failedTests').textContent = project.failed;
+
+            const failedTestsSection = document.getElementById('failedTestsSection');
+            const failedTestsList = document.getElementById('failedTestsList');
+
+            if (project.failed > 0) {
+                failedTestsSection.style.display = 'block';
+                failedTestsList.innerHTML = '';
+
+                project.failedTests.forEach(test => {
+                    const item = document.createElement('div');
+                    item.className = 'failed-test-item';
+                    item.innerHTML = `
+                        <h4>❌ ${test.file}</h4>
+                        <a href="${test.logFile}" class="log-link" target="_blank">📄 View Log File</a>
+                    `;
+                    failedTestsList.appendChild(item);
+                });
+            } else {
+                failedTestsSection.style.display = 'none';
+            }
+        }
+
+        function showProjectList() {
+            document.getElementById('summaryDetailsView').classList.remove('active');
+            document.getElementById('projectListView').style.display = 'block';
+        }
+
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        async function toggleSummary() {
+            const modal = document.getElementById('summaryModal');
+            const isActive = modal.classList.toggle('active');
+            
+            if (isActive) {
+                showProjectList();
+                // Reload history from backend when opening summary
+                await loadHistoryFromBackend();
+                initializeProjectList();
+            }
+        }
+
+        function closeSummaryOnOverlay(event) {
+            if (event.target.id === 'summaryModal') {
+                toggleSummary();
+            }
+        }
+
+        function selectProject(project) {
+            currentProject = project;
+            
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            const config = projectConfig[project];
+            document.getElementById('projectTitle').textContent = config.title;
+            document.getElementById('projectDesc').textContent = config.desc;
+            
+            document.getElementById('result').textContent = 'Ready to run tests... Click "RUN TESTS" button to begin.';
+            testResults = [];
+
+            toggleMenu();
+        }
+
+        // ========================================
+        // RUN TESTS FUNCTION
+        // ========================================
+
+           // MODIFIED: Old runTests function is now initiateRunTests
+    function runTests() {
+        // Show the Environment Modal instead of running immediately
+        document.getElementById('envModal').classList.add('active');
+    }
+
+    function closeEnvModal() {
+        document.getElementById('envModal').classList.remove('active');
+    }
+
+    // NEW FUNCTION: Actually calls the API
+    async function confirmRunTests() {
+        closeEnvModal();
+        
+        const selectedEnv = document.getElementById('envSelector').value;
+        const btn = document.getElementById("runBtn");
+        const resultEl = document.getElementById("result");
+        const config = projectConfig[currentProject];
+
+        btn.disabled = true;
+        btn.innerHTML = '⏳ Running <span class="loading"></span>';
+        resultEl.textContent = `🚀 Running ${config.title} tests on [${selectedEnv.toUpperCase()}]...\n\n`;
+
+        try {
+            // Append the environment as a query parameter
+            const url = `${config.endpoint}?env=${selectedEnv}`;
+            
+            const response = await fetch(url);
+            const data = await response.json();
+
+            // ... [Rest of the logic remains exactly the same as previous runTests] ...
+            const tests = data.tests;
+            testResults = tests;
+            await loadHistoryFromBackend();
+            
+            let output = "";
+            for (const item of tests) {
+                const statusIcon = item.status === "PASS" ? "✅" : "❌";
+                output += `\n${statusIcon} File: ${item.file}\nStatus: ${item.status}\n`;
+                output += `Log: ${item.logFile}\n`;
+                output += "─".repeat(60) + "\n";
+            }
+            
+            // Summary logic...
+            const totalTests = tests.length;
+            const passedTests = tests.filter(t => t.status === "PASS").length;
+            const failedTests = tests.filter(t => t.status === "FAIL").length;
+
+            output += `\n${"=".repeat(60)}\n`;
+            output += `📊 SUMMARY (${data.platform})\n`; // Show platform in summary
+            output += `${"=".repeat(60)}\n`;
+            output += `Total Tests: ${totalTests}\n`;
+            output += `✅ Passed: ${passedTests}\n`;
+            output += `❌ Failed: ${failedTests}\n`;
+            output += `${"=".repeat(60)}\n`;
+
+            resultEl.textContent = output;
+
+        } catch (err) {
+            resultEl.textContent = "❌ Error processing logs:\n" + err.message;
+            console.error('❌ Error running tests:', err);
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = '<span style="position: relative; z-index: 1;">▶️ RUN TESTS</span>';
+    }
+
+        // ========================================
+        // INITIALIZE ON PAGE LOAD
+        // ========================================
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 Page loaded, initializing...');
+            
+            // Load history from backend database
+            await loadHistoryFromBackend();
+            
+            // Initialize the project list
+            initializeProjectList();
+            
+            console.log('✅ Initialization complete!');
+            console.log('📊 Current history entries:', projectHistory.length);
+        });
+    </script>
+</body>
+</html>

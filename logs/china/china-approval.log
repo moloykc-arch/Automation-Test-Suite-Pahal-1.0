@@ -1,0 +1,314 @@
+--- china-approval.spec.js [PASS] ---
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] tests\china-approval.spec.js:4:9 › test
+[1A[2Ktests\china-approval.spec.js:4:9 › test
+
+--- Processing Region: CHINA with Product Code: CHINA-A043M025 ---
+
+[1A[2KCalculated Local Currency is empty or invalid, setting it to 100...
+
+[1A[2KFinal Calculated Local Currency List Price: [33m100[39m
+
+[1A[2KFuture USD List Price Value: 
+
+[1A[2KFuture Local Currency List Price Value: 
+
+[1A[2KFuture Local Currency LP Effective Date Value: 
+
+[1A[2KLP Override Flag selected value: 
+
+[1A[2K--- Eligibility Check for Approval Processing ---
+
+[1A[2KCalculated Local Currency List Price: [33m100[39m
+
+[1A[2KFuture USD List Price:  Not Null: [33mfalse[39m
+
+[1A[2KFuture Local Currency List Price:  Not Null: [33mfalse[39m
+
+[1A[2KFuture Local Currency LP Effective Date:  Not Null: [33mfalse[39m
+
+[1A[2KLP Override Flag:  Is Yes: [33mfalse[39m
+
+[1A[2KChina Pricing Action: 
+
+[1A[2KDN Pricing Action: 
+
+[1A[2KPVC Pricing Action: 
+
+[1A[2KCondition - Calculated Local Currency not zero: ✅ Passed
+
+[1A[2KCondition i - Future Prices and LP Override:
+
+[1A[2K  Future USD Not Null: [33mfalse[39m
+
+[1A[2K  Future Local Currency Not Null: [33mfalse[39m
+
+[1A[2K  Future Local Currency LP Date Not Null: [33mfalse[39m
+
+[1A[2K  LP Override Yes: [33mfalse[39m
+
+[1A[2K  Condition i Result: ❌ Failed
+
+[1A[2KCondition ii - Emergency Pricing Actions:
+
+[1A[2K  Emergency Present (China/DN/PVC): [33mfalse[39m
+
+[1A[2K  Future Local Currency Not Null: [33mfalse[39m
+
+[1A[2K  Future Local Currency LP Date Not Null: [33mfalse[39m
+
+[1A[2K  Condition ii Result: ❌ Failed
+
+[1A[2K--- Overall Eligibility ---
+
+[1A[2KEligible for Approval Processing: ❌ No
+
+[1A[2K❌ CHINA-A043M025 is NOT eligible. Move to next region.
+
+[1A[2K
+--- Processing Region: HONG KONG with Product Code: HONG KONG-A043M025 ---
+
+[1A[2KCalculated Local Currency is empty or invalid, setting it to 100...
+
+[1A[2KFinal Calculated Local Currency List Price: [33m100[39m
+
+[1A[2KFuture USD List Price Value: 
+
+[1A[2KFuture Local Currency List Price Value: 
+
+[1A[2KFuture Local Currency LP Effective Date Value: 
+
+[1A[2KLP Override Flag selected value: 
+
+[1A[2K--- Eligibility Check for Approval Processing ---
+
+[1A[2KCalculated Local Currency List Price: [33m100[39m
+
+[1A[2KFuture USD List Price:  Not Null: [33mfalse[39m
+
+[1A[2KFuture Local Currency List Price:  Not Null: [33mfalse[39m
+
+[1A[2KFuture Local Currency LP Effective Date:  Not Null: [33mfalse[39m
+
+[1A[2KLP Override Flag:  Is Yes: [33mfalse[39m
+
+[1A[2KChina Pricing Action: None
+
+[1A[2KDN Pricing Action: 
+
+[1A[2KPVC Pricing Action: 
+
+[1A[2KCondition - Calculated Local Currency not zero: ✅ Passed
+
+[1A[2KCondition i - Future Prices and LP Override:
+
+[1A[2K  Future USD Not Null: [33mfalse[39m
+
+[1A[2K  Future Local Currency Not Null: [33mfalse[39m
+
+[1A[2K  Future Local Currency LP Date Not Null: [33mfalse[39m
+
+[1A[2K  LP Override Yes: [33mfalse[39m
+
+[1A[2K  Condition i Result: ❌ Failed
+
+[1A[2KCondition ii - Emergency Pricing Actions:
+
+[1A[2K  Emergency Present (China/DN/PVC): [33mfalse[39m
+
+[1A[2K  Future Local Currency Not Null: [33mfalse[39m
+
+[1A[2K  Future Local Currency LP Date Not Null: [33mfalse[39m
+
+[1A[2K  Condition ii Result: ❌ Failed
+
+[1A[2K--- Overall Eligibility ---
+
+[1A[2KEligible for Approval Processing: ❌ No
+
+[1A[2K❌ HONG KONG-A043M025 is NOT eligible. Move to next region.
+
+[1A[2K
+--- Processing Region: MONGOLIA with Product Code: MONGOLIA-A043M025 ---
+
+[1A[2KCalculated Local Currency is empty or invalid, setting it to 100...
+
+[1A[2KFinal Calculated Local Currency List Price: [33m100[39m
+
+[1A[2KFuture USD List Price Value: 
+
+[1A[2KFuture Local Currency List Price Value: 
+
+[1A[2KFuture Local Currency LP Effective Date Value: 
+
+[1A[2KLP Override Flag selected value: 
+
+[1A[2K--- Eligibility Check for Approval Processing ---
+
+[1A[2KCalculated Local Currency List Price: [33m100[39m
+
+[1A[2KFuture USD List Price:  Not Null: [33mfalse[39m
+
+[1A[2KFuture Local Currency List Price:  Not Null: [33mfalse[39m
+
+[1A[2KFuture Local Currency LP Effective Date:  Not Null: [33mfalse[39m
+
+[1A[2KLP Override Flag:  Is Yes: [33mfalse[39m
+
+[1A[2KChina Pricing Action: 
+
+[1A[2KDN Pricing Action: 
+
+[1A[2KPVC Pricing Action: 
+
+[1A[2KCondition - Calculated Local Currency not zero: ✅ Passed
+
+[1A[2KCondition i - Future Prices and LP Override:
+
+[1A[2K  Future USD Not Null: [33mfalse[39m
+
+[1A[2K  Future Local Currency Not Null: [33mfalse[39m
+
+[1A[2K  Future Local Currency LP Date Not Null: [33mfalse[39m
+
+[1A[2K  LP Override Yes: [33mfalse[39m
+
+[1A[2K  Condition i Result: ❌ Failed
+
+[1A[2KCondition ii - Emergency Pricing Actions:
+
+[1A[2K  Emergency Present (China/DN/PVC): [33mfalse[39m
+
+[1A[2K  Future Local Currency Not Null: [33mfalse[39m
+
+[1A[2K  Future Local Currency LP Date Not Null: [33mfalse[39m
+
+[1A[2K  Condition ii Result: ❌ Failed
+
+[1A[2K--- Overall Eligibility ---
+
+[1A[2KEligible for Approval Processing: ❌ No
+
+[1A[2K❌ MONGOLIA-A043M025 is NOT eligible. Move to next region.
+
+[1A[2K
+--- Processing Region: TAIWAN with Product Code: TAIWAN-A043M025 ---
+
+[1A[2KCalculated Local Currency is empty or invalid, setting it to 100...
+
+[1A[2KFinal Calculated Local Currency List Price: [33m100[39m
+
+[1A[2KFuture USD List Price Value: 90.27
+
+[1A[2KFuture Local Currency List Price Value: 469.404
+
+[1A[2KFuture Local Currency LP Effective Date Value: 10/10/2025
+
+[1A[2KLP Override Flag selected value: Yes
+
+[1A[2K--- Eligibility Check for Approval Processing ---
+
+[1A[2KCalculated Local Currency List Price: [33m100[39m
+
+[1A[2KFuture USD List Price: 90.27 Not Null: [33mtrue[39m
+
+[1A[2KFuture Local Currency List Price: 469.404 Not Null: [33mtrue[39m
+
+[1A[2KFuture Local Currency LP Effective Date: 10/10/2025 Not Null: [33mtrue[39m
+
+[1A[2KLP Override Flag: Yes Is Yes: [33mtrue[39m
+
+[1A[2KChina Pricing Action: Emergency Change - CGT
+
+[1A[2KDN Pricing Action: 
+
+[1A[2KPVC Pricing Action: 
+
+[1A[2KCondition - Calculated Local Currency not zero: ✅ Passed
+
+[1A[2KCondition i - Future Prices and LP Override:
+
+[1A[2K  Future USD Not Null: [33mtrue[39m
+
+[1A[2K  Future Local Currency Not Null: [33mtrue[39m
+
+[1A[2K  Future Local Currency LP Date Not Null: [33mtrue[39m
+
+[1A[2K  LP Override Yes: [33mtrue[39m
+
+[1A[2K  Condition i Result: ✅ Passed
+
+[1A[2KCondition ii - Emergency Pricing Actions:
+
+[1A[2K  Emergency Present (China/DN/PVC): [33mtrue[39m
+
+[1A[2K  Future Local Currency Not Null: [33mtrue[39m
+
+[1A[2K  Future Local Currency LP Date Not Null: [33mtrue[39m
+
+[1A[2K  Condition ii Result: ✅ Passed
+
+[1A[2K--- Overall Eligibility ---
+
+[1A[2KEligible for Approval Processing: ✅ Yes
+
+[1A[2K✅ TAIWAN-A043M025 is eligible. Proceeding with approval and next process.
+
+[1A[2KPricing Manager Approval Status: Ready for Review
+
+[1A[2KStatus has other value → Leaving unchanged: Ready for Review
+
+[1A[2K✅ LP Overwrite Threshold Level 1: [33m0[39m
+
+[1A[2KCurrent Approver 1 Status: Ready for Review
+
+[1A[2KLP Override Flag selected value: Yes
+
+[1A[2KLP Override Flag: Yes Is Yes: [33mtrue[39m
+
+[1A[2KApprover 1 currentLocal: [33m90[39m
+
+[1A[2KApprover 1 futureLocal: [33m469.404[39m
+
+[1A[2KApprover 1 currentUsd: [33m10[39m
+
+[1A[2KApprover 1 futureUsd: [33m90.27[39m
+
+[1A[2KApprover 1 localPct: [33m421.56[39m
+
+[1A[2KApprover 1 usdPct: [33m802.6999999999999[39m
+
+[1A[2K✅ MATCH - Current Approver 1: Ready for Review | Expected: Ready for Review
+
+[1A[2K✅ LP Overwrite Threshold Level 2: [33m90000[39m
+
+[1A[2KCurrent Approver 2 Status: Auto
+
+[1A[2KLP Override 2 Flag selected value: Yes
+
+[1A[2KLP Override 2 Flag: Yes Is Yes: [33mtrue[39m
+
+[1A[2KApprover 2 currentLocal: [33m90[39m
+
+[1A[2KApprover 2 futureLocal: [33m469.404[39m
+
+[1A[2KApprover 2 currentUsd: [33m10[39m
+
+[1A[2KApprover 2 futureUsd: [33m90.27[39m
+
+[1A[2KApprover 2 localPct: [33m421.56[39m
+
+[1A[2KApprover 2 usdPct: [33m802.6999999999999[39m
+
+[1A[2K✅ MATCH - Current Approver 2: Auto | Expected: Auto
+
+[1A[2K✅ Approver 3 set to Auto
+
+[1A[2K✅ Approver 4 set to Auto
+
+[1A[2K--- Completed processing for TAIWAN-A043M025 ---
+
+
+[1A[2K  1 passed (2.0m)

@@ -1,0 +1,157 @@
+--- china-list-pricing.spec.js [PASS] ---
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] tests\china-list-pricing.spec.js:40:5 › test
+[1A[2Ktests\china-list-pricing.spec.js:40:5 › test
+CHINA Factor USD: [33m4[39m
+
+[1A[2KCHINA Factor Local: [33m4[39m
+
+[1A[2KTAIWAN Factor USD: [33m5[39m
+
+[1A[2KTAIWAN Factor Local: [33m6[39m
+
+[1A[2KMONGOLIA Factor USD: [33m2[39m
+
+[1A[2KMONGOLIA Factor Local: [33m7[39m
+
+[1A[2KHONG KONG Factor USD: [33m2[39m
+
+[1A[2KHONG KONG Factor Local: [33m8[39m
+
+[1A[2K📊 Current Exchange Rates:
+
+[1A[2KCHINA: [33m4[39m
+
+[1A[2KTAIWAN: [33m5[39m
+
+[1A[2KMONGOLIA: [33m1240[39m
+
+[1A[2KHONG KONG: [33m2[39m
+
+[1A[2K
+Processing region: CHINA with Product Code: CHINA-5344930F
+
+[1A[2KProcessing region: CHINA
+
+[1A[2K✅ Current Local Currency List Price is empty/null
+
+[1A[2KFuture USD List Price: [33m3108[39m
+
+[1A[2KCurrent Base Price: [33m777[39m
+
+[1A[2K📊 Extracted Values from UI:
+
+[1A[2KCurrent Base Price: [33m777[39m
+
+[1A[2KRegion: CHINA
+
+[1A[2KCalculated USD List Price = 777 * 4 = 3108
+
+[1A[2K✅ PASS: Actual USD List Price (3108) matches expected.
+
+[1A[2KCalculated Local Currency List Price: [33m12432[39m
+
+[1A[2KFuture Local Currency List Price: [33m12432[39m
+
+[1A[2KCalculated Local Currency List Price: [33m12432[39m
+
+[1A[2K✅ PASS: Future Local Currency List Price matches Calculated Local Currency List Price
+
+[1A[2K✅ PASS: Future USD List Price matches Calculated USD List Price
+
+[1A[2K
+Processing region: TAIWAN with Product Code: TAIWAN-5344930F
+
+[1A[2KProcessing region: TAIWAN
+
+[1A[2K✅ Current Local Currency List Price is empty/null
+
+[1A[2KFuture USD List Price: [33m27.3333[39m
+
+[1A[2KCurrent Base Price: [33m777[39m
+
+[1A[2K📊 Extracted Values from UI:
+
+[1A[2KCurrent Base Price: [33m777[39m
+
+[1A[2KRegion: TAIWAN
+
+[1A[2KCalculated USD List Price = 777 * 5 = 3885
+
+[1A[2K✅ PASS: Actual USD List Price (3885) matches expected.
+
+[1A[2KCalculated Local Currency List Price: [33m23310[39m
+
+[1A[2KFuture Local Currency List Price: [33m164[39m
+
+[1A[2KCalculated Local Currency List Price: [33m23310[39m
+
+[1A[2K❌ FAIL: Future Local Currency List Price (164) does NOT match Calculated Local Currency List Price (23310)
+
+[1A[2K❌ FAIL: Future USD List Price (27.3333) does NOT match Calculated USD List Price (3885)
+
+[1A[2K
+Processing region: HONG KONG with Product Code: HONG KONG-5344930F
+
+[1A[2KProcessing region: HONG KONG
+
+[1A[2K✅ Current Local Currency List Price is empty/null
+
+[1A[2KFuture USD List Price: [33m1554[39m
+
+[1A[2KCurrent Base Price: [33m777[39m
+
+[1A[2K📊 Extracted Values from UI:
+
+[1A[2KCurrent Base Price: [33m777[39m
+
+[1A[2KRegion: HONG KONG
+
+[1A[2KCalculated USD List Price = 777 * 2 = 1554
+
+[1A[2K✅ PASS: Actual USD List Price (1554) matches expected.
+
+[1A[2KCalculated Local Currency List Price: [33m12432[39m
+
+[1A[2KFuture Local Currency List Price: [33m12432[39m
+
+[1A[2KCalculated Local Currency List Price: [33m12432[39m
+
+[1A[2K✅ PASS: Future Local Currency List Price matches Calculated Local Currency List Price
+
+[1A[2K✅ PASS: Future USD List Price matches Calculated USD List Price
+
+[1A[2K
+Processing region: MONGOLIA with Product Code: MONGOLIA-5344930F
+
+[1A[2KProcessing region: MONGOLIA
+
+[1A[2K✅ Current Local Currency List Price is empty/null
+
+[1A[2KFuture USD List Price: [33mNaN[39m
+
+[1A[2KCurrent Base Price: [33m777[39m
+
+[1A[2K📊 Extracted Values from UI:
+
+[1A[2KCurrent Base Price: [33m777[39m
+
+[1A[2KRegion: MONGOLIA
+
+[1A[2KCalculated USD List Price = 777 * 2 = 1554
+
+[1A[2K❌ FAIL: Actual USD List Price (NaN) does NOT match expected (1554).
+
+[1A[2KCalculated Local Currency List Price: [33m6744360[39m
+
+[1A[2KFuture Local Currency List Price: [33mNaN[39m
+
+[1A[2KCalculated Local Currency List Price: [33mNaN[39m
+
+[1A[2K❌ FAIL: Future Local Currency List Price (NaN) does NOT match Calculated Local Currency List Price (NaN)
+
+[1A[2K❌ FAIL: Future USD List Price (NaN) does NOT match Calculated USD List Price (1554)
+
+[1A[2K  1 passed (1.9m)
