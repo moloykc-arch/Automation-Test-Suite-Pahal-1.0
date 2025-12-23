@@ -55,15 +55,16 @@ async function runPVCValidationFlow(page, context, BASE_URL) {
   
   const nrpBaseUrl = BASE_URL.replace('cdbu', 'nrp');
   await page.goto(nrpBaseUrl);
+  await page.waitForLoadState('networkidle');
   // ---- READ PVC ACTION (Rules 1–4) ----
     if (page.url() !== `${nrpBaseUrl}spriced-data`) {
       await page.getByText('Data Explorer').click();
       await page.waitForLoadState('networkidle');
   }
   // Select Plugin
-  await page1.getByRole('combobox', { name: 'plugin' }).locator('path').click(); // or 'svg' if path fails
-  await page1.getByText('NRP').click();
-  await page1.waitForLoadState('networkidle');
+  await page.getByRole('combobox', { name: 'plugin' }).locator('path').click(); // or 'svg' if path fails
+  await page.getByText('NRP').click();
+  await page.waitForLoadState('networkidle');
   await page.getByRole('button', { name: 'Filter', exact: true }).click();
   await page.getByRole('button', { name: 'Rule', exact: true }).click();
 
@@ -71,23 +72,117 @@ async function runPVCValidationFlow(page, context, BASE_URL) {
   await filterInput.fill('G6540602');
   await page.getByRole('button', { name: 'Apply' }).click();
 
-  let pricingAction =
-    (await page.locator('td[data-col="pricingAction"]').textContent())?.trim();
-  if (!pricingAction) pricingAction = 'None';
+// ---------------- PRICING ACTION VALIDATION (CHINA DBU) ----------------
 
-  if (pricingAction !== 'None') {
-    await page.goto(`${BASE_URL}007-pricing-action`);
-    await page.getByRole('textbox').fill(pricingAction);
-    await page.getByRole('button', { name: 'Search' }).click();
+// ---------------- OPEN PVC ACTION ENTITY (NEW TAB) ----------------
 
-    const allowFlag =
-      (await page.locator('td[data-col="allowFlag"]').textContent())?.trim();
+const pvcPage = await context.newPage();
 
-    if (allowFlag !== 'Yes') {
-      console.log('🚫 Allow Flag is not Yes – stopping PVC update');
-      return;
-    }
-  }
+// Navigate to PVC Action entity explicitly
+await pvcPage.goto(`${nrpBaseUrl}spriced-data`, { waitUntil: 'networkidle' });
+
+// Select entity: PVC Action
+await pvcPage.getByRole('combobox', { name: 'Part' }).click();
+await pvcPage.getByText('033 - PVC Action', { exact: true }).click();
+
+// Filter PVC Action by Part Code
+await pvcPage.getByRole('button', { name: 'Filter', exact: true }).click();
+await pvcPage.getByRole('button', { name: 'Rule', exact: true }).click();
+
+const pvcFilterInput = pvcPage.locator('mat-dialog-container input').last();
+await pvcFilterInput.fill('G6540602'); // Part Code
+await pvcPage.getByRole('button', { name: 'Apply' }).click();
+
+// Wait for row
+const pvcRow = pvcPage.locator('datatable-body-row').first();
+await expect(pvcRow).toBeVisible({ timeout: 20000 });
+const pricingActionLabel = pvcPage.locator('#cdk-accordion-child-0 div').filter({ hasText: /^Pricing Action$/ });
+await expect(pricingActionLabel).toBeVisible({ timeout: 15000 });
+
+// const pricingActionLabel = pricingActionLabel.locator(
+//   '#mat-select-value-147'
+// );
+
+// await expect(pricingActionLabel).toBeVisible({ timeout: 15000 });
+
+
+let pricingActionValue = null;
+
+// Case 1: mat-select
+if (await pricingActionLabel.locator('.mat-mdc-select-value-text').count()) {
+  pricingActionValue = await pricingActionLabel
+    .locator('.mat-mdc-select-value-text')
+    .innerText();
+}
+
+// Case 2: input field
+else if (await pricingActionLabel.locator('input').count()) {
+  pricingActionValue = await pricingActionLabel
+    .locator('input')
+    .inputValue();
+}
+
+// Business rule
+pricingActionValue = pricingActionValue?.trim();
+if (!pricingActionValue) pricingActionValue = 'None';
+
+console.log(`📌 PVC Pricing Action resolved as: ${pricingActionValue}`);
+
+
+// Always validate against China DBU Pricing Action entity
+// ---------------- VALIDATE PRICING ACTION IN CHINA DBU ----------------
+
+const pricingActionPage = await context.newPage();
+
+// Navigate to China DBU
+await pricingActionPage.goto(`${BASE_URL}spriced-data`, { waitUntil: 'networkidle' });
+
+// Select entity: 007 Pricing Action
+await pricingActionPage.getByRole('combobox', { name: 'Part' }).click();
+await pricingActionPage.getByText('007 Pricing Action', { exact: true }).click();
+await pricingActionPage.waitForLoadState('networkidle');
+// Filter by CODE = Pricing Action value
+await pricingActionPage.getByRole('button', { name: 'Filter', exact: true }).click();
+await pricingActionPage.getByRole('button', { name: 'Rule', exact: true }).click();
+
+const pricingFilterInput =
+  pricingActionPage.locator('mat-dialog-container input').last();
+
+await pricingFilterInput.fill(pricingActionValue);
+await pricingActionPage.getByRole('button', { name: 'Apply' }).click();
+
+// Wait for matching row
+const pricingRow = pricingActionPage.locator('datatable-body-row').first();
+await expect(pricingRow).toBeVisible({ timeout: 30000 });
+
+// Read Allow Flag value safely
+const allowFlag = (
+  await pricingRow
+    .locator('datatable-body-cell')
+    .filter({ hasText: /^Yes|No$/ })
+    .first()
+    .innerText()
+).trim();
+
+// Normalize
+allowFlag = allowFlag?.trim() ?? '';
+
+console.log(`📌 Allow Flag for "${pricingActionValue}" : ${allowFlag}`);
+const normalizedAllowFlag = allowFlag
+  ?.replace(/\s+/g, ' ')
+  .trim();
+
+console.log(`📌 Normalized Allow Flag: "${normalizedAllowFlag}"`);
+// Decision gate
+if (normalizedAllowFlag !== 'Yes  ') {
+  console.log('🚫 Allow Flag is not Yes – No update will happen');
+
+  await pvcPage.close();
+  await pricingActionPage.close();
+  return; // HARD STOP
+}
+
+console.log('✅ Allow Flag = Yes → continue PVC logic');
 
   const pvcAction = {
     publishCode: await page.locator('td[data-col="publishPVC"]').textContent(),
@@ -106,9 +201,9 @@ async function runPVCValidationFlow(page, context, BASE_URL) {
       : { code: pvcAction.effectiveCode, date: pvcAction.effectiveDate };
 
   // ---- DB POLLING (curl equivalent) ----
-  await fetch('http://127.0.0.1:5087/workflow/runWorkflow/DB%20polling%20mechanism', {
-    method: 'POST'
-  });
+  // await fetch('http://127.0.0.1:5087/workflow/runWorkflow/DB%20polling%20mechanism', {
+  //   method: 'POST'
+  // });
 
   console.log('⏳ Waiting for DB sync...');
   await page.waitForTimeout(15000);
@@ -331,6 +426,7 @@ test.describe.serial('NRP → PVC → China DBU Flow', () => {
 //   }
 //   });
   test('PVC Validation After DB Polling', async ({ page, context }) => {
+    test.setTimeout(120000);
     await runPVCValidationFlow(page, context, BASE_URL);
   });
 
