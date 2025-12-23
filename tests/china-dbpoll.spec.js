@@ -6,6 +6,38 @@ import { spawn } from 'child_process'; // Added missing import for spawn if used
 
 // Load environment variables
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
+async function getPVCGridValue(page, columnHeader) {
+  // 1. Find column index by header text
+  const headers = page.locator('datatable-header-cell');
+  const headerCount = await headers.count();
+
+  let columnIndex = -1;
+
+  for (let i = 0; i < headerCount; i++) {
+    const text = (await headers.nth(i).innerText()).trim();
+    if (text === columnHeader) {
+      columnIndex = i;
+      break;
+    }
+  }
+
+  if (columnIndex === -1) {
+    throw new Error(`❌ Column not found: ${columnHeader}`);
+  }
+
+  // 2. Read value from first row using index
+  const row = page.locator('datatable-body-row').first();
+  await expect(row).toBeVisible({ timeout: 30000 });
+
+  const cell = row.locator('datatable-body-cell').nth(columnIndex);
+  await expect(cell).toBeVisible({ timeout: 30000 });
+
+  const value = (await cell.innerText())?.trim();
+  return value || null;
+}
+
+
+
 
 // ==========================================
 // 🛠️ DYNAMIC ENV CONFIG
@@ -17,6 +49,247 @@ const BASE_URL = process.env.BASE_URL || 'https://dev-spriced-cdbu.alpha.simadvi
 const AUTH_BASE = 'https://auth.alpha.simadvisory.com'; 
 const AUTH_REALM = process.env.AUTH_REALM || 'D_SPRICED';
 const AUTH_CLIENT = process.env.AUTH_CLIENT_ID || 'CHN_D_SPRICED_Client';
+
+async function runPVCValidationFlow(page, context, BASE_URL) {
+  console.log(`🌐 Application URL: ${BASE_URL}`);
+  
+  // Dynamic Auth URL Construction
+  // Ensure redirect URI matches what Keycloak expects
+  const redirectUri = BASE_URL; 
+  
+  const state = '3c9abb48-9b50-4679-88a2-5d8b4d30ec82'; 
+  const nonce = 'f40a8b05-859a-440d-ae2e-4f4fa90d3e5e'; 
+
+  // Construct the full URL
+  const authUrl = `${AUTH_BASE}/realms/${AUTH_REALM}/protocol/openid-connect/auth?client_id=${AUTH_CLIENT}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${state}&response_mode=fragment&response_type=code&scope=openid&nonce=${nonce}`;
+  
+  console.log(`🚀 Navigating to Login...`);
+  console.log(`🔗 Auth Link: ${authUrl}`);
+  await page.goto(authUrl);
+  await page.waitForLoadState('networkidle');
+  await page.getByRole('textbox', { name: 'Username or email' }).fill('moloy', { timeout: 60000 });
+  await page.getByRole('textbox', { name: 'Password' }).fill('qwerty', { timeout: 60000 });
+  await page.getByRole('button', { name: 'Sign In' }).click();
+  await page.waitForLoadState('networkidle');
+  console.log('🚀 Starting PVC Validation Flow');
+  
+  const nrpBaseUrl = BASE_URL.replace('cdbu', 'nrp');
+  await page.goto(nrpBaseUrl);
+  await page.waitForLoadState('networkidle');
+  // ---- READ PVC ACTION (Rules 1–4) ----
+    if (page.url() !== `${nrpBaseUrl}spriced-data`) {
+      await page.getByText('Data Explorer').click();
+      await page.waitForLoadState('networkidle');
+  }
+  // Select Plugin
+  await page.getByRole('combobox', { name: 'plugin' }).locator('path').click(); // or 'svg' if path fails
+  await page.getByText('NRP').click();
+  await page.waitForLoadState('networkidle');
+  await page.getByRole('button', { name: 'Filter', exact: true }).click();
+  await page.getByRole('button', { name: 'Rule', exact: true }).click();
+
+  const filterInput = page.locator('mat-dialog-container input').last();
+  await filterInput.fill('G6540602');
+  await page.getByRole('button', { name: 'Apply' }).click();
+
+// ---------------- PRICING ACTION VALIDATION (CHINA DBU) ----------------
+
+// ---------------- OPEN PVC ACTION ENTITY (NEW TAB) ----------------
+
+const pvcPage = await context.newPage();
+
+// Navigate to PVC Action entity explicitly
+await pvcPage.goto(`${nrpBaseUrl}spriced-data`, { waitUntil: 'networkidle' });
+
+// Select entity: PVC Action
+await pvcPage.getByRole('combobox', { name: 'Part' }).click();
+await pvcPage.getByText('033 - PVC Action', { exact: true }).click();
+
+// Filter PVC Action by Part Code
+await pvcPage.getByRole('button', { name: 'Filter', exact: true }).click();
+await pvcPage.getByRole('button', { name: 'Rule', exact: true }).click();
+
+const pvcFilterInput = pvcPage.locator('mat-dialog-container input').last();
+await pvcFilterInput.fill('G6540602'); // Part Code
+await pvcPage.getByRole('button', { name: 'Apply' }).click();
+
+// Wait for row
+const pvcRow = pvcPage.locator('datatable-body-row').first();
+await expect(pvcRow).toBeVisible({ timeout: 20000 });
+const pricingActionLabel = pvcPage.locator('#cdk-accordion-child-0 div').filter({ hasText: /^Pricing Action$/ });
+await expect(pricingActionLabel).toBeVisible({ timeout: 15000 });
+
+// const pricingActionLabel = pricingActionLabel.locator(
+//   '#mat-select-value-147'
+// );
+
+// await expect(pricingActionLabel).toBeVisible({ timeout: 15000 });
+
+
+let pricingActionValue = null;
+
+// Case 1: mat-select
+if (await pricingActionLabel.locator('.mat-mdc-select-value-text').count()) {
+  pricingActionValue = await pricingActionLabel
+    .locator('.mat-mdc-select-value-text')
+    .innerText();
+}
+
+// Case 2: input field
+else if (await pricingActionLabel.locator('input').count()) {
+  pricingActionValue = await pricingActionLabel
+    .locator('input')
+    .inputValue();
+}
+
+// Business rule
+pricingActionValue = pricingActionValue?.trim();
+if (!pricingActionValue) pricingActionValue = 'None';
+
+console.log(`📌 PVC Pricing Action resolved as: ${pricingActionValue}`);
+
+
+// Always validate against China DBU Pricing Action entity
+// ---------------- VALIDATE PRICING ACTION IN CHINA DBU ----------------
+
+const pricingActionPage = await context.newPage();
+
+// Navigate to China DBU
+await pricingActionPage.goto(`${BASE_URL}spriced-data`, { waitUntil: 'networkidle' });
+
+// Select entity: 007 Pricing Action
+await pricingActionPage.getByRole('combobox', { name: 'Part' }).click();
+await pricingActionPage.getByText('007 Pricing Action', { exact: true }).click();
+await pricingActionPage.waitForLoadState('networkidle');
+// Filter by CODE = Pricing Action value
+await pricingActionPage.getByRole('button', { name: 'Filter', exact: true }).click();
+await pricingActionPage.getByRole('button', { name: 'Rule', exact: true }).click();
+
+const pricingFilterInput =
+  pricingActionPage.locator('mat-dialog-container input').last();
+
+await pricingFilterInput.fill(pricingActionValue);
+await pricingActionPage.getByRole('button', { name: 'Apply' }).click();
+
+// Wait for matching row
+const pricingRow = pricingActionPage.locator('datatable-body-row').first();
+await expect(pricingRow).toBeVisible({ timeout: 30000 });
+
+// Read Allow Flag value safely
+const allowFlag = (
+  await pricingRow
+    .locator('datatable-body-cell')
+    .filter({ hasText: /^Yes|No$/ })
+    .first()
+    .innerText()
+).trim();
+
+// Normalize
+// allowFlag = allowFlag?.trim() ?? '';
+
+console.log(`📌 Allow Flag for "${pricingActionValue}" : ${allowFlag}`);
+const normalizedAllowFlag = allowFlag
+  ?.replace(/\s+/g, ' ')
+  .trim();
+
+// console.log(`📌 Normalized Allow Flag: "${normalizedAllowFlag}"`);
+// Decision gate
+if (!normalizedAllowFlag.startsWith('Yes')) {
+  console.log('🚫 Allow Flag is not Yes – No update will happen');
+
+  await pvcPage.close();
+  await pricingActionPage.close();
+  return; // HARD STOP
+}
+
+console.log('✅ Allow Flag = Yes → continue PVC logic');
+
+const pvcAction = {
+  publishCode: await getPVCGridValue(pvcPage, 'Publish PVC Code'),
+  publishDate: await getPVCGridValue(pvcPage, 'Publish Effective Date'),
+
+  futureCode: await getPVCGridValue(pvcPage, 'Future PVC Code'),
+  futureDate: await getPVCGridValue(pvcPage, 'Future Effective Date'),
+  
+  effectiveCode: await getPVCGridValue(pvcPage, 'Effective PVC Code'),
+  effectiveDate: await getPVCGridValue(pvcPage, 'Effective Date')
+};
+
+console.log('📊 PVC Grid Snapshot:', pvcAction);
+
+  const selectedPVC =
+    pvcAction.publishCode
+      ? { code: pvcAction.publishCode, date: pvcAction.publishDate }
+      : pvcAction.futureCode
+      ? { code: pvcAction.futureCode, date: pvcAction.futureDate }
+      : { code: pvcAction.effectiveCode, date: pvcAction.effectiveDate };
+
+  // ---- DB POLLING (curl equivalent) ----
+  // await fetch('http://127.0.0.1:5087/workflow/runWorkflow/DB%20polling%20mechanism', {
+  //   method: 'POST'
+  // });
+
+  console.log('⏳ Waiting for DB sync...');
+  await page.waitForTimeout(15000);
+
+// ---- CHINA DBU VALIDATION (Rule 5) ----
+// --- CHINA DBU PART ENTITY VALIDATION ---
+
+const chinaPage = await context.newPage();
+await chinaPage.goto(`${BASE_URL}spriced-data`, { waitUntil: 'networkidle' });
+
+// Select entity: Part
+await chinaPage.getByRole('combobox', { name: '007 Pricing Action' }).click();
+// Open entity dropdown
+// await chinaPage.getByRole('combobox').click();
+await chinaPage.locator('#mat-option-5').getByText('Part').click();
+// Select ONLY from the dropdown panel
+// const entityOption = chinaPage
+//   .locator('mat-option')
+//   .filter({ hasText: /^001 Part$/ })
+//   .first();
+
+// await expect(entityOption).toBeVisible({ timeout: 15000 });
+// await entityOption.click();
+
+await chinaPage.waitForLoadState('networkidle');
+
+// Filter by NRP Part Code
+await chinaPage.getByRole('button', { name: 'Filter', exact: true }).click();
+await chinaPage.getByRole('button', { name: 'Rule', exact: true }).click();
+
+const chinaFilter = chinaPage.locator('mat-dialog-container input').last();
+await chinaFilter.fill('G6540602');
+await chinaPage.getByRole('button', { name: 'Apply' }).click();
+
+// Read values from GRID (Rule 5)
+const futurePVC = await getPVCGridValue(chinaPage, 'Future PVC');
+const futureDate = await getPVCGridValue(chinaPage, 'Future PVC Effective Date');
+const currentPVC = await getPVCGridValue(chinaPage, 'Current PVC');
+const publishPVC = await getPVCGridValue(chinaPage, 'Publish PVC');
+
+console.log('📊 China DBU Part Snapshot:', {
+  currentPVC,
+  publishPVC,
+  futurePVC,
+  futureDate
+});
+
+
+  if (selectedPVC.code === currentPVC || selectedPVC.code === publishPVC) {
+    expect(futurePVC).not.toBe(selectedPVC.code);
+    console.log('✅ Future PVC is not updated as it failed the Business rule');
+  } else {
+    expect(futurePVC).toBe(selectedPVC.code);
+    expect(futureDate).toBe(selectedPVC.date);
+    console.log('✅ Future PVC updated correctly');
+  }
+
+  await chinaPage.close();
+}
+
+
+test.describe.serial('NRP → PVC → China DBU Flow', () => {
 
 test('UI + API + NRP tab validation', async ({ page, context }) => {
   test.setTimeout(300000); // 5 minutes
@@ -61,7 +334,7 @@ test('UI + API + NRP tab validation', async ({ page, context }) => {
   // FIX: Use a more stable locator for the filter input in dialog
   const firstPageFilterInput = page.locator('mat-dialog-container input.mat-mdc-input-element').last();
   await expect(firstPageFilterInput).toBeVisible({ timeout: 10000 });
-  await firstPageFilterInput.fill('G6540602');
+  await firstPageFilterInput.fill('A077U707');
   
   await page.getByRole('button', { name: 'Apply' }).click();
 
@@ -203,4 +476,10 @@ test('UI + API + NRP tab validation', async ({ page, context }) => {
     server.close();
     await page1.close();
   }
+  });
+  test('PVC Validation After DB Polling', async ({ page, context }) => {
+    test.setTimeout(120000);
+    await runPVCValidationFlow(page, context, BASE_URL);
+  });
+
 });

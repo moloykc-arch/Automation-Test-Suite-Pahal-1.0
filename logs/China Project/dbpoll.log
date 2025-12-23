@@ -1,17 +1,37 @@
---- dbpoll.spec.js [FAIL] ---
+--- dbpoll.spec.js [PASS] ---
 --- ENV: https://qa-spriced-cdbu.alpha.simadvisory.com/ ---
 
-[dotenv@17.2.3] injecting env (5) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (5) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
 
-Running 1 test using 1 worker
+Running 2 tests using 1 worker
 
-[1A[2K[dotenv@17.2.3] injecting env (0) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
 
-[1A[2K[dotenv@17.2.3] injecting env (0) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
 
-[1A[2K[1/1] [chromium] › tests/dbpoll.spec.js:430:7 › NRP → PVC → China DBU Flow › PVC Validation After DB Polling
-[1A[2K[chromium] › tests/dbpoll.spec.js:430:7 › NRP → PVC → China DBU Flow › PVC Validation After DB Polling
+[1A[2K[1/2] [chromium] › tests/dbpoll.spec.js:294:5 › NRP → PVC → China DBU Flow › UI + API + NRP tab validation
+[1A[2K[chromium] › tests/dbpoll.spec.js:294:5 › NRP → PVC → China DBU Flow › UI + API + NRP tab validation
+🌐 Application URL: https://qa-spriced-cdbu.alpha.simadvisory.com/
+
+[1A[2K🚀 Navigating to Login...
+
+[1A[2K🔗 Auth Link: https://auth.alpha.simadvisory.com/realms/D_SPRICED/protocol/openid-connect/auth?client_id=CHN_D_SPRICED_Client&redirect_uri=https%3A%2F%2Fqa-spriced-cdbu.alpha.simadvisory.com%2F&state=3c9abb48-9b50-4679-88a2-5d8b4d30ec82&response_mode=fragment&response_type=code&scope=openid&nonce=f40a8b05-859a-440d-ae2e-4f4fa90d3e5e
+
+[1A[2K🌐 Navigating to NRP: https://qa-spriced-nrp.alpha.simadvisory.com/
+
+[1A[2KServer started on port 5087
+
+[1A[2K{ status: [32m'success'[39m }
+
+[1A[2K✅ Engine Model saved in NRP : 6T {CTT-6T}
+
+[1A[2KEngine Model in China DBU after refresh: 6T
+
+[1A[2K✅ Engine Model is correct in China DBU QA (6T contains 6)
+
+[1A[2K[2/2] [chromium] › tests/dbpoll.spec.js:480:7 › NRP → PVC → China DBU Flow › PVC Validation After DB Polling
+[1A[2K[chromium] › tests/dbpoll.spec.js:480:7 › NRP → PVC → China DBU Flow › PVC Validation After DB Polling
 🌐 Application URL: https://qa-spriced-cdbu.alpha.simadvisory.com/
 
 [1A[2K🚀 Navigating to Login...
@@ -22,22 +42,28 @@ Running 1 test using 1 worker
 
 [1A[2K📌 PVC Pricing Action resolved as: None
 
-[1A[2K  1) [chromium] › tests/dbpoll.spec.js:430:7 › NRP → PVC → China DBU Flow › PVC Validation After DB Polling 
+[1A[2K📌 Allow Flag for "None" : Yes {1}
 
-    TypeError: Assignment to constant variable.
+[1A[2K✅ Allow Flag = Yes → continue PVC logic
 
-      168 |
-      169 | // Normalize
-    > 170 | allowFlag = allowFlag?.trim() ?? '';
-          |          ^
-      171 |
-      172 | console.log(`📌 Allow Flag for "${pricingActionValue}" : ${allowFlag}`);
-      173 | const normalizedAllowFlag = allowFlag
-        at runPVCValidationFlow (/home/malay/playwright/tests/dbpoll.spec.js:170:10)
-        at /home/malay/playwright/tests/dbpoll.spec.js:432:5
+[1A[2K📊 PVC Grid Snapshot: {
+  publishCode: [1mnull[22m,
+  publishDate: [1mnull[22m,
+  futureCode: [1mnull[22m,
+  futureDate: [1mnull[22m,
+  effectiveCode: [32m'028'[39m,
+  effectiveDate: [32m'04/29/2025'[39m
+}
 
-    Error Context: test-results/dbpoll-NRP-→-PVC-→-China-D-da576-Validation-After-DB-Polling-chromium/error-context.md
+[1A[2K⏳ Waiting for DB sync...
 
+[1A[2K📊 China DBU Part Snapshot: {
+  currentPVC: [32m'028'[39m,
+  publishPVC: [1mnull[22m,
+  futurePVC: [1mnull[22m,
+  futureDate: [1mnull[22m
+}
 
-[1A[2K  1 failed
-    [chromium] › tests/dbpoll.spec.js:430:7 › NRP → PVC → China DBU Flow › PVC Validation After DB Polling 
+[1A[2K✅ Future PVC is not updated as it failed the Business rule
+
+[1A[2K  2 passed (1.4m)
