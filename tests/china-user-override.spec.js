@@ -53,13 +53,28 @@ test('Eligibility check and Future USD List Price calculation', async ({ page })
   // 3️⃣ Apply filters
   await page.getByRole('button', { name: 'Filter', exact: true }).click();
   await page.getByRole('button', { name: 'Rule', exact: true }).click();
-  await page.locator('#mat-input-91').fill('HONG KONG-363748700');
+  await page.locator('#mat-input-91').fill('TAIWAN-135957 20');
   await page.getByRole('button', { name: 'Apply' }).click();
-
+  await page.waitForTimeout(1000);
   // 4️⃣ Read all required fields
-  const lpFlag = await page.locator('sp-lookup-select', {
-    has: page.locator('mat-label', { hasText: 'LP Override Flag' }),
-  }).locator('.mat-mdc-select-value-text').first().innerHTML();
+  // const lpFlag = await page.locator('sp-lookup-select', {
+  //   has: page.locator('mat-label', { hasText: 'LP Override Flag' }),
+  // }).locator('.mat-mdc-select-value-text').first().innerText();
+const lpSelect = page.locator('sp-lookup-select', {
+  has: page.locator('mat-label', { hasText: 'LP Override Flag' }),
+});
+
+// 1️⃣ Ensure the component is visible
+await expect(lpSelect).toBeVisible({ timeout: 60000 });
+
+// 2️⃣ Ensure Angular finished rendering the value
+await lpSelect.locator('.mat-mdc-select-trigger').waitFor();
+
+// 3️⃣ Safely read the selected value
+  const lpFlag = await lpSelect.evaluate(el => {
+  const valueEl = el.querySelector('.mat-mdc-select-value-text');
+  return valueEl ? valueEl.textContent.trim() : '';
+});
 
   const futureLocal = await page.locator('sp-numeric', {
     has: page.locator('mat-label', { hasText: 'Future Local Currency List Price' }),

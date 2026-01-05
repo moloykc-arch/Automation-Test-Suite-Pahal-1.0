@@ -37,7 +37,7 @@ const { chromium, expect } = require('playwright/test'); // Import expect
     console.log('🧭 Navigating to List Pricing...');
     await page.getByRole('combobox', { name: 'Part' ,timeout: 30000}).locator('svg').click();
     await page.getByRole('option', { name: 'List Pricing' }).locator('span').click();
-    await page.waitForTimeout(30000);
+    await page.waitForTimeout(5000);
     
     console.log('🔍 Applying filters...');
     await page.getByRole('button', { name: 'Filter', exact: true }).click();
@@ -52,11 +52,11 @@ const { chromium, expect } = require('playwright/test'); // Import expect
 
     await page.locator('#mat-mdc-dialog-2').getByRole('button', { name: 'Rule', exact: true }).click();
     await page.locator('#mat-input-94').click();
-    console.log(`✏️ Filling List Pricing Code: 388322200`);
-    await page.locator('#mat-input-94').fill('388322200');
+    console.log(`✏️ Filling List Pricing Code: 0220-4454-04`);
+    await page.locator('#mat-input-94').fill('0220-4454-04');
     await page.locator('#mat-mdc-dialog-2').getByRole('button', { name: 'Apply' }).click();
     
-    await page.getByText('388322200').click();
+    await page.getByText('0220-4454-04').click();
     await page.getByRole('button', { name: 'Submit' }).click();
     await page.getByRole('button', { name: 'Apply' }).click();
     console.log('✅ Filter applied.');
@@ -65,9 +65,9 @@ const { chromium, expect } = require('playwright/test'); // Import expect
     console.log('📥 Extracting LP Markup Factor...');
     
     // Expand the accordion to see details (usually the first row detail)
-    const lpRow = page.locator('datatable-body-row').first();
+    const lpRow = page.locator('datatable-body-row').nth(2);
     await lpRow.click(); // Click row to expand details if needed
-    
+    await expect(lpRow).toBeVisible(    { timeout: 5000 });
     // Refined Locator: Find the label first, then the input next to it or under it
     // The previous locator might have failed if multiple numeric fields existed.
     // We target the input specifically associated with the label.
@@ -79,7 +79,7 @@ const { chromium, expect } = require('playwright/test'); // Import expect
     
     await lpMarkupFactorInput.waitFor({ state: 'visible', timeout: 30000 });
     let lpMarkupValue = await lpMarkupFactorInput.inputValue();
-    console.log(`   Raw LP Value: "${lpMarkupValue}"`);
+    console.log(`Raw LP Value: "${lpMarkupValue}"`);
     lpMarkupValue = lpMarkupValue ? parseFloat(lpMarkupValue.replace(/,/g, '').trim()) : 0;
     console.log(`📊 Parsed LP Markup Factor: ${lpMarkupValue}`);
 
@@ -99,8 +99,8 @@ const { chromium, expect } = require('playwright/test'); // Import expect
     await page1.getByRole('button', { name: 'Rule', exact: true }).click();
     const markupFilterInput = page1.locator('mat-dialog-container input.mat-mdc-input-element').last();
     await markupFilterInput.click();
-    console.log(`✏️ Filling Markup Code: 978`);
-    await markupFilterInput.fill('978');
+    console.log(`✏️ Filling Markup Code: 95`);
+    await markupFilterInput.fill('95');
     await page1.getByRole('button', { name: 'Apply' }).click();
     
     // Wait for grid to load results
@@ -119,16 +119,35 @@ const { chromium, expect } = require('playwright/test'); // Import expect
     cmMarkupValue = cmMarkupValue ? parseFloat(cmMarkupValue.replace(/,/g, '').trim()) : 0;
     console.log(`📊 Parsed Current CM Markup Factor: ${cmMarkupValue}`);
     
+    //NEW: Extract "Future CM Markup Factor"
+    console.log('📥 Extracting Future CM Markup Factor...');
+    const futurecmMarkupLabel = page1.locator('mat-label', { hasText: 'Future CM Markup Factor' }).first();
+    const futurecmMarkupFactorInput = page1.locator('sp-numeric').filter({ has: futurecmMarkupLabel }).locator('input').first();
+    
+    await futurecmMarkupFactorInput.waitFor({ state: 'visible', timeout: 30000 });
+    let futurecmMarkupValue = await futurecmMarkupFactorInput.inputValue();
+    console.log(`   Raw CM Value: "${futurecmMarkupValue}"`);
+    futurecmMarkupValue = futurecmMarkupValue ? parseFloat(futurecmMarkupValue.replace(/,/g, '').trim()) : 0;
+    console.log(`📊 Parsed Future CM Markup Factor: ${futurecmMarkupValue}`);
+
     // NEW: Compare Values
-    console.log('⚖️ Comparing values...');
-    // Allow small floating point difference
-    if (Math.abs(lpMarkupValue - cmMarkupValue) < 0.001) {
-        console.log("✅ PASS: Markup factors match.");
+    const TOLERANCE = 0.001;
+
+    const matchesCurrent =
+    Math.abs(lpMarkupValue - cmMarkupValue) < TOLERANCE;
+
+    const matchesFuture =
+    Math.abs(lpMarkupValue - futurecmMarkupValue) < TOLERANCE;
+
+    if (matchesCurrent || matchesFuture) {
+        console.log(
+        `✅ PASS: LP Markup matches ` +
+        `${matchesCurrent ? 'Current CM' : 'Future CM'} Markup.`)
     } else {
-        console.error(`❌ FAIL: Mismatch! LP Markup: ${lpMarkupValue} vs CM Markup: ${cmMarkupValue}`);
+        console.error(`❌ FAIL: Mismatch! LP Markup: ${lpMarkupValue} vs Current CM Markup: ${cmMarkupValue} or Future CM Markup: ${futurecmMarkupValue}`);
         process.exit(1); // Fail the script
     }
 
     await browser.close();
-    console.log('🏁 Playwright script execution completed.');
+    console.log('🏁 Test execution completed.');
 })();

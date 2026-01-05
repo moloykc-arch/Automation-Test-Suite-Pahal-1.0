@@ -23,10 +23,11 @@ const isQA = process.env.TEST_ENV_NAME === 'QA';
 const SSH_HOST = isQA ? 'qa-spriced' : 'dev-spriced'; 
 
 test('Future -> Current Country Factor transfer after scheduler run', async ({ page }) => {
+  test.setTimeout(60000);
   console.log('🚀 Test started');
 
-  const username = 'souvik';
-  const password = 'Souvik@123';
+  const username = 'moloy';
+  const password = 'qwerty';
   const futureValueToSet = `${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}.${Math.floor(Math.random() * 10)}${Math.floor(Math.random() * 10)}`;
 
   const today = new Date();

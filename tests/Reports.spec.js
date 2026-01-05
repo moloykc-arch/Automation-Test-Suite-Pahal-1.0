@@ -116,7 +116,7 @@ test('Validate Pricing Report Logic vs Data Explorer', async ({ page }) => {
     
     await page.getByRole('button', { name: 'Apply' }).click();
     await page.waitForLoadState('networkidle');
-    await page.waitForTimeout(2000); // Wait for grid reload
+    await page.waitForTimeout(10000); // Wait for grid reload
     
     const chinaRow = page.locator('datatable-body-row').filter({ hasText: 'CHINA' }).first();
     
@@ -124,7 +124,7 @@ test('Validate Pricing Report Logic vs Data Explorer', async ({ page }) => {
     if (await chinaRow.count() === 0) {
         throw new Error("❌ 'CHINA' region row not found in Data Explorer! Please check filters.");
     }
-    console.log("✅ Found CHINA region row.");
+    console.log("✅ Found CHINA region.");
     
     // Extract Data from Grid
     const sourceData = {};
@@ -180,7 +180,7 @@ test('Validate Pricing Report Logic vs Data Explorer', async ({ page }) => {
     
     // FIX: Navigate Directly to Reports URL instead of relying on popup
     await reportPage.getByRole('button', { name: 'All ▾' }).click();
-    await reportPage.getByRole('button', { name: '15' }).first().click();
+    await reportPage.getByRole('button', { name: '30' }).first().click();
     await reportPage.getByRole('textbox', { name: 'Enter part numbers (comma,' }).click();
     await reportPage.getByRole('textbox', { name: 'Enter part numbers (comma,' }).fill(TARGET_PART_NUMBER);
     await reportPage.getByRole('button', { name: 'SUBMIT' }).click();

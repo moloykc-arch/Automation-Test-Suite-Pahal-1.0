@@ -12,7 +12,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 // 🛠️ DYNAMIC ENV CONFIG
 // ==========================================
 const isQA = process.env.TEST_ENV_NAME === 'QA';
-const SSH_HOST = isQA ? 'qa-spriced' : 'simw01'; 
+const SSH_HOST = isQA ? 'simw01' : 'simw01'; 
 
 const BASE_URL = process.env.BASE_URL || 'https://dev-spriced-cdbu.alpha.simadvisory.com/';
 const AUTH_BASE = 'https://auth.alpha.simadvisory.com'; 
@@ -174,8 +174,8 @@ test('List Pricing Calculation', async ({ page, context }) => {
     await page.getByRole('button', { name: 'Rule', exact: true }).click();
 
     console.log(`Applying Markup Filter with Code: ${markupCode}`);
-    await page.locator('#mat-input-81').click();
-    await page.locator('#mat-input-81').fill(markupCode);
+    await page.locator('mat-dialog-container input.mat-mdc-input-element').last().click();
+    await page.locator('mat-dialog-container input.mat-mdc-input-element').fill(markupCode);
 
     await page.getByRole('button', { name: 'Apply' }).click();
 
@@ -217,6 +217,7 @@ test('List Pricing Calculation', async ({ page, context }) => {
     await page1.getByRole('combobox', { name: 'Markup' }).locator('svg').click();
     await page1.getByText('sys Country').click();
 
+
     // Helper to extract factors
     const extractFactor = async (p, labelUSD, labelLocal) => {
         const usdLoc = p.locator(`//sp-numeric[.//mat-label[text()="${labelUSD}"]]//input`);
@@ -230,7 +231,7 @@ test('List Pricing Calculation', async ({ page, context }) => {
         }
         return { USD: 1, Local: 1 }; // Default safe values
     };
-
+await page.waitForTimeout();
     const chinaFactors = await extractFactor(page1, 'Current Country Factor USD', 'Current Country Factor Local');
     console.log("CHINA Factors:", chinaFactors);
 
@@ -246,8 +247,8 @@ test('List Pricing Calculation', async ({ page, context }) => {
     const hkFactors = await extractFactor(page1, 'Current Country Factor USD', 'Current Country Factor Local');
     console.log("HONG KONG Factors:", hkFactors);
 
-    await page1.getByRole('button', { name: 'Save', exact: true }).click();
-    await page1.waitForLoadState('networkidle');
+    // await page1.getByRole('button', { name: 'Save', exact: true }).click();
+    // await page1.waitForLoadState('networkidle');
 
     // ----------------- Page2: sys Exchange Rate -----------------
     const page2 = await context.newPage();
@@ -261,7 +262,7 @@ test('List Pricing Calculation', async ({ page, context }) => {
         CHINA: await getExchangeRate(page2, 'CHINA'),
         TAIWAN: await getExchangeRate(page2, 'TAIWAN'),
         MONGOLIA: await getExchangeRate(page2, 'MONGOLIA'),
-        'HONG KONG': await getExchangeRate(page2, 'HONG KONG')
+        HONGKONG: await getExchangeRate(page2, 'HONG KONG')
     };
     console.log("📊 Exchange Rates:", regionExchangeRates);
 
@@ -291,23 +292,7 @@ test('List Pricing Calculation', async ({ page, context }) => {
       try {
           await page3.goto(`${BASE_URL}spriced-data`);
           await page3.waitForLoadState('networkidle');
-
-          // Directly select List Pricing (skip Exchange Rate as per instruction)
-          // We assume the default view or previous selection might need adjustment, 
-          // but since we open a new page, we must select List Pricing from the main dropdown
-          
-          // Note: If 'sys Exchange Rate' was the last selection in a previous session, 
-          // we need to switch from whatever it is to 'List Pricing'.
-          // The most reliable way is to open the dropdown and select 'List Pricing'.
-          
-          // Check if we need to click a specific parent combo first. 
-          // Usually 'List Pricing' is under the main entity dropdown.
-          
-          // Try to locate the main dropdown that allows switching entities
-          // Based on previous code: combobox name='sys Exchange Rate' was clicked to switch.
-          // But since this is a NEW page load, the label might be different (e.g., 'Markup' or 'sys Country').
-          // We use a generic approach to find the dropdown and select 'List Pricing'.
-          
+    
           const entityDropdown = page3.getByRole('combobox').nth(1); // Usually the second one is Entity
           await entityDropdown.click();
           

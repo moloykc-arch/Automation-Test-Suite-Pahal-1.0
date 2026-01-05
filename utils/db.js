@@ -29,12 +29,12 @@ let dbPassword = process.env.DB_PASS || process.env.DB_PASSWORD;
 // unless a very specific different password was passed in DB_PASS.
 // If DB_PASS was not passed (undefined) OR if it picked up the default 'mysecretpassword' from .env, correct it.
 if (dbUser === 'china_app') {
-    if (!process.env.DB_PASSWORD || dbPassword === 'mysecretpassword') {
+    if (!process.env.DB_PASSWORD || dbPassword === 'admin_china_app') {
         console.log('🔒 Applying default password for china_app user.');
         dbPassword = 'admin_china_app';
     }
 } else if (!dbPassword) {
-    dbPassword = 'mysecretpassword';
+    dbPassword = 'admin_china_app';
 }
 
 const dbConfig = {

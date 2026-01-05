@@ -56,14 +56,14 @@ ENV_URLS = {
 
 # Test Files
 CHINA_TEST_FILES = [
-    # "china-syscountry-attribute-movement.spec.js",
-    # "china-user-override.spec.js",
+    # "syscountry.spec.js",
     # "china-approval.spec.js",
-    "dbpoll.spec.js", 
-    # "china-pricing-action.spec.js",
-    # "china-flow-Business-rule.spec.js",
+    "china-dbpoll.spec.js", 
+    # "china-user-override.spec.js",
+    # "price-action.spec.js",
+    # "china-Business-rule.spec.js",
     # "china-stocking.spec.js",
-    # "china-list-pricing.spec.js",
+    # "list-price-calculation.spec.js",
     # "Reports.spec.js"
 ]
 
@@ -72,7 +72,10 @@ PSBU_TEST_FILES = []
 
 # Python Post-Execution Scripts
 PYTHON_POST_EXECUTION_SCRIPTS = [
-    # "tests/inbound-sales.py"
+    # "tests/alerts.py",
+    # "tests/core-markup-factor.py",
+    # "tests/inbound-sales.py",
+    # "tests/Outbound.py",
 ]
 
 # ----------------------------

@@ -36,15 +36,15 @@ test('validate Future Product Group rule', async ({ page }) => {
   console.log(`🔗 Auth Link: ${authUrl}`);
 
   await page.goto(authUrl);
-  await page.getByRole('textbox', { name: 'Username or email' }).fill('Souvik', { timeout: 60000 });
-  await page.getByRole('textbox', { name: 'Password' }).fill('Souvik@123', { timeout: 60000 });
+  await page.getByRole('textbox', { name: 'Username or email' }).fill('moloy', { timeout: 60000 });
+  await page.getByRole('textbox', { name: 'Password' }).fill('qwerty', { timeout: 60000 });
   await page.getByRole('button', { name: 'Sign In' }).click();
   await page.waitForLoadState('networkidle');
   await page.waitForSelector('text=Work with master data and', { timeout: 120000 });
 
   // ---- 2. Navigate to Filters/Rules ----
   await page.getByText('Work with master data and').click();
-  await page.getByText('Model View Explorer Notifications Hi, Souvik Ghosh').click();
+  await page.getByText('Model View Explorer Notifications').click();
   await page.getByRole('button', { name: 'Filter', exact: true }).click();
   await page.getByRole('button', { name: 'Rule', exact: true }).click();
 
@@ -52,11 +52,14 @@ test('validate Future Product Group rule', async ({ page }) => {
   await page.getByRole('button', { name: 'Apply' }).click();
 
   // ---- 3. Select PM Override Flag = Yes ----
+  let pmFlag='';
   const pmLookup = page.locator('sp-lookup-select:has(mat-label:text("PM Override Flag"))');
   await pmLookup.waitFor({ state: 'visible', timeout: 120000 });
   await pmLookup.locator('mat-select').click();
   await page.locator('mat-option >> text=Yes').click();
-  console.log('✅ PM Override Flag selected: Yes');
+  const selectedFlag = await pmLookup.locator('.mat-mdc-select-value .mat-mdc-select-min-line').innerText().catch(() => '');
+  pmFlag=selectedFlag.trim();
+  console.log('✅ PM Override Flag:',pmFlag);
 
   // ---- 4. Read Future Product Group ----
   const futureLookup = page.locator('sp-lookup-select:has(mat-label:text("Future Product Group"))');
@@ -90,7 +93,7 @@ const systemGroup = await systemGroupInput.evaluate(input => input.value.trim())
     console.log('❌ Test Failed: Future Product Group should NOT equal System Recommended Product Group');
     expect(false, 'Future Product Group equals System Recommended Product Group').toBeTruthy();
   } else {
-    console.log('✅ Test Passed: Future Product Group is valid (either empty or different)');
+    console.log('✅ Test Passed: If PM Override Flag equals to Yes AND Future PG equals to System Recommended PG AND Future PG not null THEN Future PG is not valid');
   }
 
   // ---- 7. Submit and Save ----

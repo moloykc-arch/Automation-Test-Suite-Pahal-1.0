@@ -1,17 +1,17 @@
---- dbpoll.spec.js [PASS] ---
+--- china-dbpoll.spec.js [PASS] ---
 --- ENV: https://qa-spriced-cdbu.alpha.simadvisory.com/ ---
 
-[dotenv@17.2.3] injecting env (5) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[dotenv@17.2.3] injecting env (5) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
 
 Running 2 tests using 1 worker
 
-[1A[2K[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  enable debug logging with { debug: true }
 
-[1A[2K[dotenv@17.2.3] injecting env (0) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
 
-[1A[2K[1/2] [chromium] › tests/dbpoll.spec.js:294:5 › NRP → PVC → China DBU Flow › UI + API + NRP tab validation
-[1A[2K[chromium] › tests/dbpoll.spec.js:294:5 › NRP → PVC → China DBU Flow › UI + API + NRP tab validation
+[1A[2K[1/2] [chromium] › tests/china-dbpoll.spec.js:296:5 › NRP PVC → China DBU PVC Flow › UI + API + NRP tab validation
+[1A[2K[chromium] › tests/china-dbpoll.spec.js:296:5 › NRP PVC → China DBU PVC Flow › UI + API + NRP tab validation
 🌐 Application URL: https://qa-spriced-cdbu.alpha.simadvisory.com/
 
 [1A[2K🚀 Navigating to Login...
@@ -30,8 +30,8 @@ Running 2 tests using 1 worker
 
 [1A[2K✅ Engine Model is correct in China DBU QA (6T contains 6)
 
-[1A[2K[2/2] [chromium] › tests/dbpoll.spec.js:480:7 › NRP → PVC → China DBU Flow › PVC Validation After DB Polling
-[1A[2K[chromium] › tests/dbpoll.spec.js:480:7 › NRP → PVC → China DBU Flow › PVC Validation After DB Polling
+[1A[2K[2/2] [chromium] › tests/china-dbpoll.spec.js:482:7 › NRP PVC → China DBU PVC Flow › PVC Validation After DB Polling
+[1A[2K[chromium] › tests/china-dbpoll.spec.js:482:7 › NRP PVC → China DBU PVC Flow › PVC Validation After DB Polling
 🌐 Application URL: https://qa-spriced-cdbu.alpha.simadvisory.com/
 
 [1A[2K🚀 Navigating to Login...
@@ -55,12 +55,18 @@ Running 2 tests using 1 worker
   effectiveDate: [32m'04/29/2025'[39m
 }
 
-[1A[2K⏳ Waiting for DB sync...
+[1A[2K⏳ Waiting for CHINA DBU sync...
+
+[1A[2KServer started on port 5087
+
+[1A[2K{ status: [32m'success'[39m }
 
 [1A[2K📊 China DBU Part Snapshot: {
   currentPVC: [32m'028'[39m,
+  currentDate: [32m'04/29/2025'[39m,
   publishPVC: [1mnull[22m,
-  futurePVC: [1mnull[22m,
+  publishDate: [1mnull[22m,
+  futurePVC: [32m'902'[39m,
   futureDate: [1mnull[22m
 }
 

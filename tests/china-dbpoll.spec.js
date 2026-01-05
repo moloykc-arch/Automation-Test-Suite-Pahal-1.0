@@ -102,7 +102,8 @@ const pvcPage = await context.newPage();
 await pvcPage.goto(`${nrpBaseUrl}spriced-data`, { waitUntil: 'networkidle' });
 
 // Select entity: PVC Action
-await pvcPage.getByRole('combobox', { name: 'Part' }).click();
+// await pvcPage.getByRole('combobox', { name: 'Part' }).click();
+await pvcPage.getByLabel('010 - Part').first().click();
 await pvcPage.getByText('033 - PVC Action', { exact: true }).click();
 
 // Filter PVC Action by Part Code
@@ -118,12 +119,6 @@ const pvcRow = pvcPage.locator('datatable-body-row').first();
 await expect(pvcRow).toBeVisible({ timeout: 20000 });
 const pricingActionLabel = pvcPage.locator('#cdk-accordion-child-0 div').filter({ hasText: /^Pricing Action$/ });
 await expect(pricingActionLabel).toBeVisible({ timeout: 15000 });
-
-// const pricingActionLabel = pricingActionLabel.locator(
-//   '#mat-select-value-147'
-// );
-
-// await expect(pricingActionLabel).toBeVisible({ timeout: 15000 });
 
 
 let pricingActionValue = null;
@@ -224,15 +219,28 @@ console.log('📊 PVC Grid Snapshot:', pvcAction);
       ? { code: pvcAction.futureCode, date: pvcAction.futureDate }
       : { code: pvcAction.effectiveCode, date: pvcAction.effectiveDate };
 
-  // ---- DB POLLING (curl equivalent) ----
-  // await fetch('http://127.0.0.1:5087/workflow/runWorkflow/DB%20polling%20mechanism', {
-  //   method: 'POST'
-  // });
+  // ---------------- CALL DB POLLING API ----------------
+  const app = express();
+  app.use(express.json());
+  app.post('/workflow/runWorkflow/DB%20polling%20mechanism', (req, res) => {
+    res.json({ status: 'success' });
+  });
 
-  console.log('⏳ Waiting for DB sync...');
-  await page.waitForTimeout(15000);
+  const server = app.listen(5087, async () => {
+    console.log('Server started on port 5087');
+    try {
+      const response = await fetch('http://127.0.0.1:5087/workflow/runWorkflow/DB%20polling%20mechanism', { method: 'POST' });
+      const data = await response.json();
+      console.log(data); // { status: 'success' }
+    } catch (e) {
+      console.error('Failed to trigger DB polling workflow:', e);
+    }
+    server.close();
+  });
 
-// ---- CHINA DBU VALIDATION (Rule 5) ----
+console.log('⏳ Waiting for CHINA DBU sync...');
+await page.waitForTimeout(15000);
+
 // --- CHINA DBU PART ENTITY VALIDATION ---
 
 const chinaPage = await context.newPage();
@@ -241,17 +249,7 @@ await chinaPage.goto(`${BASE_URL}spriced-data`, { waitUntil: 'networkidle' });
 // Select entity: Part
 await chinaPage.getByRole('combobox', { name: '007 Pricing Action' }).click();
 // Open entity dropdown
-// await chinaPage.getByRole('combobox').click();
 await chinaPage.locator('#mat-option-5').getByText('Part').click();
-// Select ONLY from the dropdown panel
-// const entityOption = chinaPage
-//   .locator('mat-option')
-//   .filter({ hasText: /^001 Part$/ })
-//   .first();
-
-// await expect(entityOption).toBeVisible({ timeout: 15000 });
-// await entityOption.click();
-
 await chinaPage.waitForLoadState('networkidle');
 
 // Filter by NRP Part Code
@@ -266,11 +264,15 @@ await chinaPage.getByRole('button', { name: 'Apply' }).click();
 const futurePVC = await getPVCGridValue(chinaPage, 'Future PVC');
 const futureDate = await getPVCGridValue(chinaPage, 'Future PVC Effective Date');
 const currentPVC = await getPVCGridValue(chinaPage, 'Current PVC');
+const currentDate = await getPVCGridValue(chinaPage, 'Current PVC Effective Date');
 const publishPVC = await getPVCGridValue(chinaPage, 'Publish PVC');
+const publishDate = await getPVCGridValue(chinaPage, 'Publish PVC Effective Date');
 
 console.log('📊 China DBU Part Snapshot:', {
   currentPVC,
+  currentDate,
   publishPVC,
+  publishDate,
   futurePVC,
   futureDate
 });
@@ -289,7 +291,7 @@ console.log('📊 China DBU Part Snapshot:', {
 }
 
 
-test.describe.serial('NRP → PVC → China DBU Flow', () => {
+test.describe.serial('NRP PVC → China DBU PVC Flow', () => {
 
 test('UI + API + NRP tab validation', async ({ page, context }) => {
   test.setTimeout(300000); // 5 minutes
@@ -397,7 +399,7 @@ test('UI + API + NRP tab validation', async ({ page, context }) => {
       const data = await response.json();
       console.log(data); // { status: 'success' }
     } catch (e) {
-      console.error('Failed to trigger local polling workflow:', e);
+      console.error('Failed to trigger DB polling workflow:', e);
     }
     server.close();
   });

@@ -12,7 +12,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 // 🛠️ DYNAMIC ENV CONFIG
 // ==========================================
 const isQA = process.env.TEST_ENV_NAME === 'QA';
-const SSH_HOST = isQA ? 'qa-spriced' : 'simw01'; 
+const SSH_HOST = isQA ? 'simw01' : 'simw01'; 
 
 const BASE_URL = process.env.BASE_URL || 'https://dev-spriced-cdbu.alpha.simadvisory.com/';
 const AUTH_BASE = 'https://auth.alpha.simadvisory.com'; 
