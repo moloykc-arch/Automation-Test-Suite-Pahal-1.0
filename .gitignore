@@ -9,3 +9,4 @@ node_modules/
 .venv/
 .venv/
 /tests/pycache/
+README.md
